@@ -6,7 +6,8 @@ printenv
 
 echo "--> start tfe_server -->"
 python3 -m tf_encrypted.player --config /app/config.json YOwner
-echo "-------->"
+echo "--------> server started --------"
+
 
 
 

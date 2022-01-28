@@ -1,4 +1,4 @@
-tfe:
+tfe-XOwner:
     image: bm_tfe
     volumes:
     - ../app:/app

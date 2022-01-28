@@ -1,9 +1,9 @@
-tfe-RS:
+tfe-YOwnerRun:
     image: bm_tfe
     volumes:
     - ../app:/app
     - ./:/Player
     ports:
-    - 4568:4568
+    - 4567:4567
 
 

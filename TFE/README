@@ -1,0 +1,29 @@
+Step 1. create the docker
+    ./make
+
+
+Step 2. Edit app/config.json
+    For example,
+    {
+        "XOwner": "192.168.0.102:4566",
+        "YOwner": "192.168.0.102:4567",
+        "RS": "192.168.0.102:4568"
+    }
+
+
+Step 3. Start server of OwnerX
+    cd XOwner
+    docker-compose up &
+
+Step 4. Start server of RS
+    cd RS
+    docker-compose up &
+
+Step 5. Start server of YOwner, and run LR training for dataset credet10
+    cd YOwnerRUN
+    docker-compose up &
+
+or Step5'. Start server of YOwner
+    cd YOwner
+    docker-compose &
+
