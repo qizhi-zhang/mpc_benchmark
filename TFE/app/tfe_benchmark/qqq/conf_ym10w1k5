@@ -1,0 +1,61 @@
+{
+    "trainParams": {
+        "learningRate": 0.01,
+        "maxIter": 15,
+        "batchSize": 100,
+        "epsilon": 0.0001,
+        "regularizationL1": 0,
+        "regularizationL2": 1.0,
+        "solver": "tfe"
+                },
+    "midMatchField": {
+        "node_id1": ["id1", "date"],
+        "node_id2": ["id2", "date_time"]
+                },
+    "algorithm": "LR",
+    "trainSetRate": 0.8,
+    "positiveValue": 1,
+
+    "nodes": {
+        "node_id1": {
+            "merchantAddressModular": "http://127.0.0.1",
+            "publicKey": "test_public_key"
+        },
+        "node_id2": {
+            "merchantAddressModular": "http://127.0.0.1",
+            "publicKey": "test_public_key"
+        }
+    },
+    "dataSet": {
+        "node_id1": {
+            "storagePath": "file/qqq/data/10w1k5col_x.csv",
+            "fileRecord": 20000,
+            "isContainY": False,
+            "matchColNum": 2,
+            "featureNum": 1649
+        },
+        "node_id2": {
+            "storagePath": "file/qqq/data/10w1k5col_y.csv",
+            "fileRecord": 20000,
+            "isContainY": True,
+            "matchColNum": 2,
+            "featureNum": 0
+        }
+    },
+    "dataSetPredict": {
+        "node_id1": {
+            "storagePath": "file/qqq/data/10w1k5col_x.csv",
+            "fileRecord": 20000,
+            "isContainY": False,
+            "matchColNum": 2,
+            "featureNum": 1649
+        },
+        "node_id2": {
+            "storagePath": "file/qqq/data/10w1k5col_y.csv",
+            "fileRecord": 20000,
+            "isContainY": True,
+            "matchColNum": 2,
+            "featureNum": 0
+        }
+    }
+}

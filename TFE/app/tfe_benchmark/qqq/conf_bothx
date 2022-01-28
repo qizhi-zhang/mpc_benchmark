@@ -1,0 +1,55 @@
+{
+    "trainParams": {
+        "learningRate": 0.01,
+        "maxIter": 2,
+        "batchSize": 64,
+        "epsilon": 0.0001,
+        "regularizationL1": 0,
+        "regularizationL2": 1.0,
+        "solver": "tfe"
+                },
+    "midMatchField": {
+        "node_id1": ["id1", "date"],
+        "node_id2": ["id2", "date_time"]
+                },
+    "algorithm": "LR",
+    "trainSetRate": 0.8,
+    "positiveValue": 1,
+
+    "nodes": {
+        "node_id1": {
+            "merchantAddressModular": "http://127.0.0.1",
+            "publicKey": "test_public_key"
+        },
+        "node_id2": {
+            "merchantAddressModular": "http://127.0.0.1",
+            "publicKey": "test_public_key"
+        }
+    },
+    "dataSet": {"mid_02075393v4xbyd3745": {"featureNum": 5,
+ "isContainY": False,
+ "matchColNum": 1,
+ "fileRecord": 9633,
+ "storagePath": "engineer/engi_366724f145512ef388d38447a2bae371_X_train"}
+,
+ "mid_0207k698729mw628as": {"featureNum": 5,
+ "isContainY": True,
+ "matchColNum": 1,
+ "fileRecord": 9633,
+ "storagePath": "engineer/engi_160a8001ecc495a8eceaa55725f9e737_Y_train"}
+}
+,
+ "dataSetPredict": {"mid_02075393v4xbyd3745": {"featureNum": 5,
+ "isContainY": False,
+ "matchColNum": 1,
+ "fileRecord": 12042,
+ "storagePath": "engineer/engi_366724f145512ef388d38447a2bae371_X"}
+,
+ "mid_0207k698729mw628as":
+ {"featureNum": 5,
+ "isContainY": True,
+ "matchColNum": 1,
+ "fileRecord": 12042,
+ "storagePath": "engineer/engi_160a8001ecc495a8eceaa55725f9e737_Y"}
+}
+}
