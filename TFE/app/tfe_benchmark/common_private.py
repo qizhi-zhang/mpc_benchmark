@@ -3,49 +3,9 @@ logistic regression"""
 import tensorflow as tf
 import tf_encrypted as tfe
 import os
-#from commonutils.common_config import CommonConfig
-"""
-from read_data_tf import get_10w1k5col_x, get_10w1k5col_y, get_embed_op_5w_x, 
-get_embed_op_5w_y, get_gaode3w_x, get_gaode3w_y
-"""
+
 import numpy as np
 
-def fake_sigmoid(x, M=16):
-  x=tfe.reveal(x).to_native()
-  #M = 16
-  X = np.linspace(-M, M, 256, endpoint=False)  # -M to+M的256个值
-  Sigmoid = 1 / (1 + np.exp(-X))
-  Sm5 = Sigmoid - 0.5
-
-  Sm5_odd = Sm5 * 1.0
-  Sm5_odd[0] = 0
-  F = np.fft.fft(Sm5_odd)
-  # a1 = F[1].imag
-  # a2 = F[2].imag
-  # a3 = F[3].imag
-  # a4 = F[4].imag
-  # a5 = F[5].imag
-  # print(a1, a2, a3, a4, a5)
-  a=F[0:6].imag
-  print("a=",a)
-
-  #a=[0, 79.01170242947703,  4.373381493344161, 21.67435635245209, 5.884090709554829,10.443694686327152]
-
-
-  fake = -1.0 * (a[1] * tf.sin(2 * np.pi * (x - M) / (2 * M)) + a[2] * tf.sin(2 * 2 * np.pi * (x - M) / (2 * M))
-                 + a[3] * tf.sin(2 * 3 * np.pi * (x - M) / (2 * M)) + a[4] * tf.sin(2 * 4 * np.pi * (x - M) / (2 * M)) + a[5] * tf.sin(
-    2 * 5 * np.pi * (x - M) / (2 * M))) / 128
-  fake=fake*5/6+0.5
-  fake_sigmoid=tfe.define_public_input(player='YOwner', inputter_fn=lambda:  fake)
-  return fake_sigmoid
-
-
-
-def true_sigmoid(x):
-  x=tfe.reveal(x).to_native()
-  sigmoid=tf.sigmoid(x)
-  true_sigmoid=tfe.define_public_input(player='YOwner', inputter_fn=lambda:  sigmoid)
-  return true_sigmoid
 
 
 class LogisticRegression:
@@ -83,8 +43,6 @@ class LogisticRegression:
             out = tfe.matmul(x, self.w_masked) + self.b_masked
             if with_sigmoid:
                 y = tfe.sigmoid(out)
-                #y = fake_sigmoid(out,M=256)
-                #y = true_sigmoid(out)
             else:
                 y = out
             return y
@@ -175,35 +133,6 @@ class LogisticRegression:
 
         sess.run(print_accuracy_op, tag='evaluate')
 
-    # def get_KS(self, sess, x, y, batch_num):
-    #   def print_KS(y_hat, y) -> tf.Operation:
-    #     with tf.name_scope("print-KS"):
-    #       # m = tf.keras.metrics.FalsePositives(list(np.array(range(1, 100))*0.01))
-    #       y_hat=tf.clip_by_value(y_hat, 0.0, 1.0)
-    #       FP, FP_up= tf.metrics.false_positives_at_thresholds(labels=y, predictions=y_hat, 
-    #                                                           thresholds=list(np.array(range(0, 100)) * 0.01))
-    #       TP, TP_up= tf.metrics.true_positives_at_thresholds(labels=y, predictions=y_hat, 
-    #                                                          thresholds=list(np.array(range(0, 100)) * 0.01))
-    # 
-    #       FPR = FP / (tf.constant(1E-6) + FP[0])
-    # 
-    #       TPR = TP / (tf.constant(1E-6) + TP[0])
-    #       KS= tf.reduce_max(TPR - FPR)
-    #       print("KS:", KS)
-    #       # m.update_state(y, y_hat)
-    #       print_op=tf.print('KS=', KS )
-    #       return print_op, FP_up, TP_up
-    # 
-    #   with tf.name_scope("get_KS"):
-    #     y_hat = self.forward(x)
-    # 
-    #     print_KS_op = tfe.define_output("YOwner", [y_hat, y], print_KS)
-    #     print("print_KS_op:", print_KS_op)
-    #   sess.run(tf.local_variables_initializer())
-    #   for _ in range(batch_num):
-    #     sess.run(print_KS_op, tag='evaluate_KS')
-    # 
-
     def predict_batch(self, x):
         """
 
@@ -229,45 +158,28 @@ class LogisticRegression:
         :param device_name: output device
         :param record_num_ceil_mod_batch_size:
         """
-        # sess.run(tf.local_variables_initializer())
-
-        #CommonConfig.http_logger.info("x:" + str(x))
 
         predict_batch = self.predict_batch(x)
 
         with tf.device(device_name):
             predict_batch = tf.strings.as_string(predict_batch)
-            print("idx:", idx)
-            #CommonConfig.http_logger.info("idx:" + str(idx))
             predict_batch = tf.concat([idx, predict_batch], axis=1)
             predict_batch = tf.reduce_join(predict_batch, axis=1, separator=", ")
-            # predict_batch=tf.reduce_join(predict_batch, separator="\n")
-
-            #CommonConfig.http_logger.info("predict_batch:" + str(predict_batch))
-
             with open(file_name, "w") as f, open(progress_file, "a") as progress_file:
 
                 for batch in range(num_batches):
                     print("batch :", batch)
                     records = sess.run(predict_batch)
 
-                    # y_hat=str(y_hat)
-                    # print(y_hat)
-
                     if batch == num_batches - 1:
                         records = records[0:record_num_ceil_mod_batch_size]
-
-                    # records = str(records, encoding="utf8")
                     records = "\n".join(records.astype('str'))
 
                     f.write(records + "\n")
 
-                    # if (batch % 10 == 0):
                     if batch % (1 + int(num_batches / 100)) == 0:
                         progress_file.write(str(1.0 * batch / num_batches) + "\n")
                         progress_file.flush()
-
-        #CommonConfig.http_logger.info("predict OK")
 
     def save(self, modelFilePath, modelFileMachine="YOwner"):
         """
