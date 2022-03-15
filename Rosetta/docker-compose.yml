@@ -1,0 +1,13 @@
+version: '2.0'
+services:
+  Rosetta:
+    #image: registry.cn-hangzhou.aliyuncs.com/dtunion/rosetta:v0.96
+    #image: registry.cn-hangzhou.aliyuncs.com/dtunion/morsestf:idash20_SGD
+    image: rosetta:v20220314
+    ports:
+      - 7777:7777
+    tty: true
+    command:
+      #/bin/bash -c "cd app && python3 rosetta_demo.py --party_id=0"
+      #- apt-get install gcc
+      - /bin/bash
